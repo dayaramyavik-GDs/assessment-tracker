@@ -1,0 +1,59 @@
+name: assessment-tracker
+
+services:
+  mongo:
+    image: mongo:7
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+    ports:
+      - "127.0.0.1:27017:27017"   # only reachable from your PC (for Compass)
+    volumes:
+      - mongo_data:/data/db        # data survives restarts
+    networks:
+      - backend
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build: ./backend
+    image: assessment-tracker-api:dev
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      NODE_ENV: development
+      PORT: 3000
+      # Overrides the localhost URI in .env: inside Docker the DB host is the service name 'mongo'
+      MONGODB_URI: mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongo:27017/${MONGO_DB_NAME}?authSource=admin
+    ports:
+      - "3000:3000"
+    depends_on:
+      mongo:
+        condition: service_healthy
+    networks:
+      - backend
+
+  mongo-express:
+    image: mongo-express:latest
+    profiles: ["tools"]            # only starts with --profile tools
+    environment:
+      ME_CONFIG_MONGODB_URL: mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongo:27017/?authSource=admin
+      ME_CONFIG_BASICAUTH_USERNAME: ${ME_USER}
+      ME_CONFIG_BASICAUTH_PASSWORD: ${ME_PASSWORD}
+    ports:
+      - "127.0.0.1:8081:8081"
+    depends_on:
+      - mongo
+    networks:
+      - backend
+
+volumes:
+  mongo_data:
+
+networks:
+  backend:
+    driver: bridge
