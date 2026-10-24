@@ -1,0 +1,52 @@
+@base = http://localhost:3000/api
+
+### Health
+GET {{base}}/health
+
+### Register
+# @name register
+POST {{base}}/auth/register
+Content-Type: application/json
+
+{ "name": "Demo Student", "email": "demo@example.com", "password": "Passw0rd1" }
+
+### Login
+# @name login
+POST {{base}}/auth/login
+Content-Type: application/json
+
+{ "email": "demo@example.com", "password": "Passw0rd1" }
+
+@token = {{login.response.body.token}}
+
+### Create unit
+# @name unit
+POST {{base}}/units
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{ "code": "ICT301", "name": "Mobile Development", "semester": "2026-S2", "targetGrade": 70, "colour": "#7c3aed" }
+
+@unitId = {{unit.response.body.unit._id}}
+
+### Create assessment
+POST {{base}}/assessments
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{ "unitId": "{{unitId}}", "title": "Assignment 1", "type": "assignment", "dueAt": "2026-10-24T12:59:00.000Z", "weighting": 30, "markReceived": 62 }
+
+### Unit detail with grade summary
+GET {{base}}/units/{{unitId}}
+Authorization: Bearer {{token}}
+
+### Dashboard
+GET {{base}}/dashboard
+Authorization: Bearer {{token}}
+
+### At risk
+GET {{base}}/at-risk
+Authorization: Bearer {{token}}
+
+### Should be 401
+GET {{base}}/units

@@ -1,0 +1,56 @@
+# ---------- Environment & secrets ----------
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+*.keystore
+build.json
+secrets/
+
+# ---------- Node.js ----------
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.npm/
+coverage/
+.nyc_output/
+
+# ---------- Logs ----------
+logs/
+*.log
+
+# ---------- Cordova ----------
+mobile/platforms/
+mobile/plugins/
+mobile/www/js/config.local.js
+
+# ---------- Android ----------
+*.apk
+*.aab
+*.ap_
+*.idsig
+.gradle/
+local.properties
+captures/
+.externalNativeBuild/
+.cxx/
+**/build/
+
+# ---------- Docker ----------
+docker-compose.override.yml
+*.tar
+
+# ---------- IDE / OS ----------
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea/
+*.iml
+.DS_Store
+Thumbs.db
+desktop.ini
