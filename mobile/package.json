@@ -1,0 +1,47 @@
+{
+  "name": "au.edu.cqu.dayaram.assessmenttracker",
+  "displayName": "Assessment Tracker",
+  "version": "1.0.0",
+  "description": "A sample Apache Cordova application that responds to the deviceready event.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "config:dev": "node scripts/set-config.js dev",
+    "config:prod": "node scripts/set-config.js prod",
+    "lint": "eslint .",
+    "browser": "npm run config:dev && cordova run browser",
+    "android:dev": "npm run config:dev && cordova run android --device",
+    "android:release": "npm run config:prod && cordova build android --release -- --packageType=bundle"
+  },
+  "keywords": [
+    "ecosystem:cordova"
+  ],
+  "author": "Apache Cordova Team",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "cordova-android": "^15.1.0",
+    "cordova-browser": "^7.0.0",
+    "cordova-plugin-device": "^3.0.0",
+    "cordova-plugin-local-notification": "^1.2.3",
+    "cordova-plugin-network-information": "^3.1.0",
+    "eslint": "^10.13.0",
+    "globals": "^17.13.0"
+  },
+  "cordova": {
+    "platforms": [
+      "android",
+      "browser"
+    ],
+    "plugins": {
+      "cordova-plugin-network-information": {},
+      "cordova-plugin-device": {},
+      "cordova-plugin-local-notification": {
+        "ANDROIDX_CORE_VERSION": "1.12.0"
+      }
+    }
+  },
+  "dependencies": {
+    "jquery": "^4.0.0"
+  }
+}
